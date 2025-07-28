@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [saldo, setSaldo] = useState(null);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
-    // Hacemos fetch al backend con token de autenticación
     fetch('https://wallet-simulator.onrender.com/api/balance', {
       headers: {
-        'Authorization': 'Bearer 1234' // ⬅️ REEMPLAZÁ ESTO SI TENÉS OTRO TOKEN
+        Authorization: `Bearer ${localStorage.getItem('token') || '1234'}`,
       },
     })
       .then((res) => {
@@ -40,7 +41,7 @@ export default function Home() {
 
         <div className="grid grid-cols-3 gap-4">
           <Boton icono="/ingresar.png" texto="Ingresar" />
-          <Boton icono="/transferir.png" texto="Transferir" />
+          <Boton icono="/transferir.png" texto="Transferir" onClick={() => router.push('/transfer')} />
           <Boton icono="/sube.png" texto="Cargar SUBE" />
         </div>
       </div>
@@ -48,9 +49,12 @@ export default function Home() {
   );
 }
 
-function Boton({ icono, texto }) {
+function Boton({ icono, texto, onClick }) {
   return (
-    <div className="flex flex-col items-center justify-center bg-gradient-to-b from-sky-200 to-sky-300 rounded-full w-24 h-24 mx-auto shadow-md hover:scale-105 transition">
+    <div
+      onClick={onClick}
+      className="flex flex-col items-center justify-center bg-gradient-to-b from-sky-200 to-sky-300 rounded-full w-24 h-24 mx-auto shadow-md hover:scale-105 transition cursor-pointer"
+    >
       <img src={icono} alt={texto} className="w-10 h-10 mb-1" />
       <span className="text-xs font-semibold text-sky-900">{texto}</span>
     </div>
