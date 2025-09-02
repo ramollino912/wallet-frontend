@@ -1,62 +1,109 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function Home() {
+export default function HomePage() {
   const [saldo, setSaldo] = useState(null);
   const [error, setError] = useState('');
+  const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     fetch('https://wallet-simulator.onrender.com/api/balance', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token') || '1234'}`,
-      },
+      headers: { Authorization: `Bearer 1234` } // Reemplazá con tu token real
     })
-      .then((res) => {
-        if (!res.ok) throw new Error('Error al conectar con el servidor');
+      .then(res => {
+        if (!res.ok) throw new Error('Error de conexión');
         return res.json();
       })
-      .then((data) => setSaldo(data.balance))
-      .catch((err) => {
-        console.error(err);
-        setError('No se pudo cargar el saldo');
-      });
+      .then(data => setSaldo(data.balance))
+      .catch(() => setError('No se pudo cargar saldo'));
   }, []);
 
+  const actions = [
+    { label: 'Transferir', icon: '/icons/transferir.png', action: () => router.push('/transfer') },
+    { label: 'Ingresar', icon: '/icons/ingresar.png' },
+    { label: 'Cargar SUBE', icon: '/icons/sube.png', badge: 'SUBE' },
+    { label: 'Movimientos', icon: '/icons/movimientos.png' },
+    { label: 'Pagar impuestos', icon: '/icons/impuestos.png' },
+    { label: 'Recargar datos', icon: '/icons/recarga.png' },
+  ];
+
+  const menu = [
+    { label: 'Inicio', icon: '/icons/home.png' },
+    { label: 'Transferir', icon: '/icons/transferir.png', action: () => router.push('/transfer') },
+    { label: 'Ingresar', icon: '/icons/ingresar.png' },
+    { label: 'Cargar SUBE', icon: '/icons/sube.png' },
+    { label: 'Notificaciones', icon: '/icons/notificaciones.png' },
+    { label: 'Perfil', icon: '/icons/perfil.png' },
+  ];
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-sky-400 to-white flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-md p-6 max-w-xl w-full relative border border-black">
-        <h1 className="text-2xl font-bold mb-4">Bienvenido a tu Billetera</h1>
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 bg-white border-r p-4">
+        <nav className="space-y-2">
+          {menu.map((item, i) => (
+            <button
+              key={i}
+              onClick={item.action}
+              className="flex items-center p-2 hover:bg-gray-100 rounded w-full text-left"
+            >
+              <img src={item.icon} alt={item.label} className="w-5 h-5 mr-3" />
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-        <div className="mb-4">
-          <p className="text-lg">Saldo disponible:</p>
-          {saldo !== null ? (
-            <p className="text-4xl font-bold text-green-600">${saldo}</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">Cargando...</p>
-          )}
-        </div>
+      {/* Mobile menu overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+      )}
 
-        <div className="grid grid-cols-3 gap-4">
-          <Boton icono="/ingresar.png" texto="Ingresar" />
-          <Boton icono="/transferir.png" texto="Transferir" onClick={() => router.push('/transfer')} />
-          <Boton icono="/sube.png" texto="Cargar SUBE" />
-        </div>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        {/* Top bar for mobile */}
+        <header className="bg-white p-4 lg:hidden flex items-center justify-between shadow">
+          <button onClick={() => setMobileOpen(true)}>☰</button>
+          <div className="flex space-x-3">
+            <img src="/icons/notificaciones.png" alt="Notificaciones" className="w-5 h-5" />
+            <img src="/icons/perfil.png" alt="Perfil" className="w-5 h-5" />
+          </div>
+        </header>
+
+        <main className="flex-1 p-6 overflow-auto">
+          <h1 className="text-2xl font-bold mb-4">Dinero disponible</h1>
+          <div className="bg-white p-6 rounded-lg shadow mb-8 flex justify-between items-center">
+            <p className="text-4xl font-bold">
+              {saldo !== null
+                ? `$${saldo}`
+                : error
+                ? error
+                : 'Cargando...'}
+            </p>
+            <img src="/icons/movimientos.png" alt="Grafico" className="w-10 h-10 opacity-40" />
+          </div>
+
+          {/* Quick actions */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {actions.map((act, i) => (
+              <button
+                key={i}
+                onClick={act.action}
+                className="bg-white border rounded-xl p-4 shadow hover:shadow-lg transition-all text-left relative"
+              >
+                <img src={act.icon} alt={act.label} className="w-8 h-8 mb-2" />
+                <span className="font-semibold">{act.label}</span>
+                {act.badge && (
+                  <span className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded">
+                    {act.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </main>
       </div>
-    </main>
-  );
-}
-
-function Boton({ icono, texto, onClick }) {
-  return (
-    <div
-      onClick={onClick}
-      className="flex flex-col items-center justify-center bg-gradient-to-b from-sky-200 to-sky-300 rounded-full w-24 h-24 mx-auto shadow-md hover:scale-105 transition cursor-pointer"
-    >
-      <img src={icono} alt={texto} className="w-10 h-10 mb-1" />
-      <span className="text-xs font-semibold text-sky-900">{texto}</span>
     </div>
   );
 }

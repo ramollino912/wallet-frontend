@@ -12,21 +12,24 @@ export default function TransferPage() {
     setError('');
 
     try {
-      const token = localStorage.getItem('token'); // El token debe venir de un login en el futuro
+      const token = localStorage.getItem('token'); // ⚡ en el futuro vendrá del login
 
-      const res = await fetch('https://wallet-simulator.onrender.com/transfer', {
+      const res = await fetch('https://wallet-simulator.onrender.com/api/transfer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token || '1234'}`, // Reemplazá con un token real si no hay login aún
+          Authorization: `Bearer ${token || '1234'}`, // ⚠️ cambiá esto cuando tengas login real
         },
-        body: JSON.stringify({ to: parseInt(to), amount: parseFloat(amount) }),
+        body: JSON.stringify({
+          to: parseInt(to),      // id del receptor
+          amount: parseFloat(amount), // monto
+        }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setMensaje('✅ Transferencia exitosa');
+        setMensaje(`✅ Transferencia exitosa: $${amount} enviada a ID ${to}`);
         setTo('');
         setAmount('');
       } else {
