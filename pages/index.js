@@ -20,7 +20,6 @@ export default function HomePage() {
   }, []);
 
   const actions = [
-<<<<<<< Updated upstream
     { label: 'Transferir', icon: '/icons/transferir.png', action: () => router.push('/transfer') },
     { label: 'Ingresar', icon: '/icons/ingresar.png' },
     { label: 'Cargar SUBE', icon: '/icons/sube.png', badge: 'SUBE' },
@@ -36,21 +35,6 @@ export default function HomePage() {
     { label: 'Cargar SUBE', icon: '/icons/sube.png' },
     { label: 'Notificaciones', icon: '/icons/notificaciones.png' },
     { label: 'Perfil', icon: '/icons/perfil.png' },
-=======
-    { label: 'Transferir', icon: '/icons/transferir.svg', action: () => router.push('/transferir') },
-    { label: 'Ingresar', icon: '/icons/ingresar.svg' },
-    { label: 'Cargar SUBE', icon: '/icons/sube.svg', badge: 'SUBE' },
-    { label: 'Movimientos', icon: '/icons/movimientos.svg' },
-    { label: 'Pagar impuestos', icon: '/icons/impuestos.svg' },
-    { label: 'Recargar datos', icon: '/icons/recarga.svg' },
-  ];
-
-  const menu = [
-    { label: 'Inicio', icon: '/icons/home.svg' },
-    { label: 'Transferir', icon: '/icons/transferir.svg', action: () => router.push('/transferir') },
-    { label: 'Ingresar', icon: '/icons/ingresar.svg' },
-    // ...
->>>>>>> Stashed changes
   ];
 
   return (
@@ -62,11 +46,7 @@ export default function HomePage() {
             <button
               key={i}
               onClick={item.action}
-<<<<<<< Updated upstream
               className="flex items-center p-2 hover:bg-gray-100 rounded w-full text-left"
-=======
-              className="flex items-center p-2 hover:bg-gray-100 rounded"
->>>>>>> Stashed changes
             >
               <img src={item.icon} alt={item.label} className="w-5 h-5 mr-3" />
               {item.label}
@@ -86,13 +66,8 @@ export default function HomePage() {
         <header className="bg-white p-4 lg:hidden flex items-center justify-between shadow">
           <button onClick={() => setMobileOpen(true)}>☰</button>
           <div className="flex space-x-3">
-<<<<<<< Updated upstream
             <img src="/icons/notificaciones.png" alt="Notificaciones" className="w-5 h-5" />
             <img src="/icons/perfil.png" alt="Perfil" className="w-5 h-5" />
-=======
-            <img src="/icons/notificaciones.svg" alt="Notificaciones" className="w-5 h-5" />
-            <img src="/icons/perfil.svg" alt="Perfil" className="w-5 h-5" />
->>>>>>> Stashed changes
           </div>
         </header>
 
@@ -106,10 +81,7 @@ export default function HomePage() {
                 ? error
                 : 'Cargando...'}
             </p>
-<<<<<<< Updated upstream
             <img src="/icons/movimientos.png" alt="Grafico" className="w-10 h-10 opacity-40" />
-=======
->>>>>>> Stashed changes
           </div>
 
           {/* Quick actions */}
@@ -118,20 +90,12 @@ export default function HomePage() {
               <button
                 key={i}
                 onClick={act.action}
-<<<<<<< Updated upstream
                 className="bg-white border rounded-xl p-4 shadow hover:shadow-lg transition-all text-left relative"
-=======
-                className={`relative ${act.bgColor || 'bg-blue-200'} p-4 rounded-lg flex flex-col items-start hover:shadow-lg`}
->>>>>>> Stashed changes
               >
                 <img src={act.icon} alt={act.label} className="w-8 h-8 mb-2" />
                 <span className="font-semibold">{act.label}</span>
                 {act.badge && (
-<<<<<<< Updated upstream
                   <span className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded">
-=======
-                  <span className="absolute top-2 right-2 bg-white p-1 text-xs rounded">
->>>>>>> Stashed changes
                     {act.badge}
                   </span>
                 )}
