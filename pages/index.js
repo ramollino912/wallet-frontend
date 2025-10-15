@@ -19,20 +19,22 @@ export default function HomePage() {
       .catch(() => setError('No se pudo cargar saldo'));
   }, []);
 
+  // 🔹 Botones principales (acciones rápidas)
   const actions = [
     { label: 'Transferir', icon: '/icons/transferir.png', action: () => router.push('/transfer') },
     { label: 'Ingresar', icon: '/icons/ingresar.png' },
-    { label: 'Cargar SUBE', icon: '/icons/sube.png', badge: 'SUBE' },
+    { label: 'Cargar SUBE', icon: '/icons/sube.png', badge: 'SUBE', action: () => router.push('/cargar-sube') },
     { label: 'Movimientos', icon: '/icons/movimientos.png' },
     { label: 'Pagar impuestos', icon: '/icons/impuestos.png' },
     { label: 'Recargar datos', icon: '/icons/recarga.png' },
   ];
 
+  // 🔹 Ítems del menú lateral
   const menu = [
-    { label: 'Inicio', icon: '/icons/home.png' },
+    { label: 'Inicio', icon: '/icons/home.png', action: () => router.push('/') },
     { label: 'Transferir', icon: '/icons/transferir.png', action: () => router.push('/transfer') },
     { label: 'Ingresar', icon: '/icons/ingresar.png' },
-    { label: 'Cargar SUBE', icon: '/icons/sube.png' },
+    { label: 'Cargar SUBE', icon: '/icons/sube.png', action: () => router.push('/cargar-sube') },
     { label: 'Notificaciones', icon: '/icons/notificaciones.png' },
     { label: 'Perfil', icon: '/icons/perfil.png' },
   ];
@@ -57,12 +59,15 @@ export default function HomePage() {
 
       {/* Mobile menu overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
       )}
 
       {/* Main content */}
       <div className="flex-1 flex flex-col">
-        {/* Top bar for mobile */}
+        {/* Top bar (solo en mobile) */}
         <header className="bg-white p-4 lg:hidden flex items-center justify-between shadow">
           <button onClick={() => setMobileOpen(true)}>☰</button>
           <div className="flex space-x-3">
@@ -73,6 +78,8 @@ export default function HomePage() {
 
         <main className="flex-1 p-6 overflow-auto">
           <h1 className="text-2xl font-bold mb-4">Dinero disponible</h1>
+
+          {/* Card de saldo */}
           <div className="bg-white p-6 rounded-lg shadow mb-8 flex justify-between items-center">
             <p className="text-4xl font-bold">
               {saldo !== null
@@ -84,7 +91,7 @@ export default function HomePage() {
             <img src="/icons/movimientos.png" alt="Grafico" className="w-10 h-10 opacity-40" />
           </div>
 
-          {/* Quick actions */}
+          {/* Acciones rápidas */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {actions.map((act, i) => (
               <button
